@@ -1,0 +1,47 @@
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:postgres@db:5432/mission
+      - JWT_SECRET=${JWT_SECRET:-change-me-in-production}
+      - ADMIN_USERNAME=${ADMIN_USERNAME:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
+      - WHISPER_URL=http://whisper:9000
+      - SITE_URL=${SITE_URL:-http://localhost:3000}
+      - CLIENT_NAME=${CLIENT_NAME:-Template Client}
+      - CLIENT_LOGO=${CLIENT_LOGO:-/logo.png}
+      - PRIMARY_COLOR=${PRIMARY_COLOR:-#4F38E0}
+      - SECONDARY_COLOR=${SECONDARY_COLOR:-#6C5CE7}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      - POSTGRES_DB=mission
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  whisper:
+    image: onerahmet/openai-whisper-asr-webservice:latest
+    environment:
+      - ASR_MODEL=base
+      - ASR_ENGINE=faster_whisper
+    ports:
+      - "9000:9000"
+    restart: unless-stopped
+
+volumes:
+  pgdata:

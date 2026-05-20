@@ -1,26 +1,163 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --color-primary: #4F38E0;
+  --color-primary-light: #6C5CE7;
+  --color-primary-bg: rgba(79, 56, 224, 0.06);
+  --color-primary-border: rgba(79, 56, 224, 0.15);
+  --color-dark: #1a1a2e;
+  --color-dark-soft: #2d2d44;
+  --color-text: #2c3e50;
+  --color-text-secondary: #64748b;
+  --color-text-light: #94a3b8;
+  --color-border: #e2e8f0;
+  --color-border-hover: #cbd5e1;
+  --color-card-bg: rgba(255, 255, 255, 0.75);
+  --color-page-bg: #f8fafc;
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+  --color-info: #3b82f6;
+  --font-display: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-page-bg);
+}
+
+/* Scroll progress bar */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  z-index: 100;
+  transition: width 0.1s ease;
+}
+
+/* Card styles */
+.card {
+  background: var(--color-card-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  border-color: var(--color-primary-border);
+  box-shadow: 0 8px 30px rgba(79, 56, 224, 0.08);
+  transform: translateY(-2px);
+}
+
+/* Phase card with gradient top */
+.phase-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.phase-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.phase-card:hover::before {
+  opacity: 1;
+}
+
+/* Status badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+}
+
+.badge-success { background: #d1fae5; color: #065f46; }
+.badge-warning { background: #fef3c7; color: #92400e; }
+.badge-info { background: #dbeafe; color: #1e40af; }
+.badge-error { background: #fee2e2; color: #991b1b; }
+.badge-gray { background: #f1f5f9; color: #475569; }
+
+/* Section divider */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-border), transparent);
+  margin: 3rem 0;
+}
+
+/* Smooth fade in animation */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Table styles */
+.table-mission {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table-mission th {
+  background: var(--color-primary);
+  color: white;
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.table-mission th:first-child { border-radius: 12px 0 0 0; }
+.table-mission th:last-child { border-radius: 0 12px 0 0; }
+
+.table-mission td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.table-mission tr:hover td {
+  background: var(--color-primary-bg);
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 8px;
+  background: var(--color-border);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+  border-radius: 4px;
+  transition: width 0.5s ease;
 }
