@@ -21,9 +21,6 @@ export async function POST(req: Request) {
       description: body.description || '',
       responsabilite: body.responsabilite || 'ORRTYL',
       statut: body.statut || 'a_faire',
-      detail: body.detail,
-      limites: body.limites,
-      dependDe: body.depend_de,
       ordre: body.ordre || 0,
     }).returning();
     return NextResponse.json(row, { status: 201 });

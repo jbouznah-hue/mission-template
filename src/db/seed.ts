@@ -52,9 +52,6 @@ async function seed() {
     await db.insert(livrables).values({
       ...l,
       statut: 'a_faire',
-      detail: null,
-      limites: null,
-      dependDe: null,
     }).onConflictDoNothing();
   }
 

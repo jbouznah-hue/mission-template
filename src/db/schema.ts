@@ -36,10 +36,9 @@ export const livrables = pgTable(
       .$type<'a_faire' | 'brouillon' | 'en_review' | 'valide'>()
       .notNull()
       .default('a_faire'),
-    detail: text('detail'),
-    limites: text('limites'),
-    dependDe: text('depend_de'),
     ordre: integer('ordre').notNull(),
+    fileName: text('file_name'),
+    fileData: text('file_data'),
     createdAt: timestamp('created_at').defaultNow().notNull(),
     updatedAt: timestamp('updated_at').defaultNow().notNull(),
   },
