@@ -84,23 +84,39 @@ export default function Messagerie() {
   }).sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 
   const sendMessage = async () => {
-    if (!newMessage.trim()) return;
-    const [itemType, itemId] = activeConv === 'general' ? ['general', null] : activeConv.split(':');
+    const text = newMessage.trim();
+    if (!text) return;
+
+    let itemType = 'general';
+    let itemId: string | null = null;
+    if (activeConv !== 'general') {
+      const parts = activeConv.split(':');
+      itemType = parts[0];
+      itemId = parts[1] || null;
+    }
+
     const auteur = isAdmin ? 'admin' : 'client';
-    const res = await fetch('/api/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        item_type: itemType,
-        item_id: itemId,
-        auteur,
-        contenu: newMessage.trim(),
-      }),
-    });
-    if (res.ok) {
+
+    try {
+      const res = await fetch('/api/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          item_type: itemType,
+          item_id: itemId,
+          auteur,
+          contenu: text,
+        }),
+      });
       const msg = await res.json();
-      setMessages(prev => [...prev, msg]);
-      setNewMessage('');
+      if (res.ok) {
+        setMessages(prev => [...prev, msg]);
+        setNewMessage('');
+      } else {
+        console.error('Erreur envoi message:', msg);
+      }
+    } catch (err) {
+      console.error('Erreur réseau:', err);
     }
   };
 
